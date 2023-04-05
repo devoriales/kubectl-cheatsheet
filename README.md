@@ -6,6 +6,7 @@ It is a work in progress and we will be adding more commands as we go along. If 
 
 - [What is Kubectl](#what-is-kubectl)
 - [How The Communication Works](#how-the-communication-works)
+- [How to Install Kubectl](#how-to-install-kubectl)
 - [Cluster Information](#cluster-information)
 - [Resource Management](#resource-management)
 - [Inspecting Resources](#inspecting-resources)
@@ -33,12 +34,6 @@ With kubectl, you can perform a wide range of operations on the cluster, such as
 
 To begin using kubectl, you must first install it on your local machine. Please refer to the next section for installation instructions.
 
-## Cluster Information
-With the following command, we can get information about the cluster, like the version of Kubernetes that is running, the IP address of the master, and the names of the nodes in the cluster.
-
-```bash
-kubectl cluster-info
-```
 
 ## How The Communication Works
 
@@ -79,6 +74,40 @@ Upon receiving the API request, the API server processes it and performs the nec
 Kubectl receives the API response from the Kubernetes API server, which typically includes data in JSON format, log messages, and more.
 
 Finally, kubectl displays the message to the user in the terminal.
+
+## How To Install Kubectl
+Download the latest version:
+
+```
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/darwin/amd64/kubectl"
+```
+Download a specific version:
+
+```
+curl -LO "https://dl.k8s.io/release/v1.24.0/bin/darwin/amd64/kubectl"
+To make the kubectl binary executable:
+
+chmod +x ./kubectl
+To be able to run kubectl without specifying the path, move the kubectl binaries to a file location on your system PATH:
+
+sudo mv ./kubectl /usr/local/bin/kubectl
+sudo chown root: /usr/local/bin/kubectl
+to check the version
+
+kubectl version --client
+
+## Output
+
+Client Version: version.Info{Major:"1", Minor:"19", GitVersion:"v1.19.7", GitCommit:"1dd5338295409edcfff11505e7bb246f0d325d15", GitTreeState:"clean", BuildDate:"2021-01-13T13:23:52Z", GoVersion:"go1.15.5", Compiler:"gc", Platform:"darwin/amd64"}
+```
+
+
+## Cluster Information
+With the following command, we can get information about the cluster, like the version of Kubernetes that is running, the IP address of the master, and the names of the nodes in the cluster.
+
+```bash
+kubectl cluster-info
+```
 
 ## Resource Management
 The following commands are used to manage resources in the cluster
