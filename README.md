@@ -1,4 +1,4 @@
-# Kubectl Cheatsheet
+# DEvoriales - Kubectl Cheatsheet
 
 We created this  Kubectl Cheatsheet for you to use as a quick reference guide. It contains the most common commands used when working with Kubernetes.
 It is a work in progress and we will be adding more commands as we go along. If you have any suggestions, please feel free to open an issue or a pull request.
