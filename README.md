@@ -4,8 +4,8 @@ We created this  Kubectl Cheatsheet for you to use as a quick reference guide. I
 It is a work in progress and we will be adding more commands as we go along. If you have any suggestions, please feel free to open an issue or a pull request.
 ## Table of Contents
 
-- [What is Kubectl](#What is Kubectl)
-- [How The Communication Works](#How The Communication Works)
+- [What is Kubectl](#what-is-kubectl)
+- [How The Communication Works](#how-the-communication-works)
 - [Cluster Information](#cluster-information)
 - [Resource Management](#resource-management)
 - [Inspecting Resources](#inspecting-resources)
