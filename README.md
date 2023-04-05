@@ -4,6 +4,9 @@ We created this  Kubectl Cheatsheet for you to use as a quick reference guide. I
 It is a work in progress and we will be adding more commands as we go along. If you have any suggestions, please feel free to open an issue or a pull request.
 ## Table of Contents
 
+What is Kubectl
+- [What is Kubectl](#What is Kubectl)
+- [How The Communication Works](#How The Communication Works)
 - [Cluster Information](#cluster-information)
 - [Resource Management](#resource-management)
 - [Inspecting Resources](#inspecting-resources)
@@ -22,6 +25,14 @@ It is a work in progress and we will be adding more commands as we go along. If 
 - [Create Resourses with `cat` command](#create-resourses-with-cat)
 - [Getting API Resources](#getting-api-resources)
 
+## What is Kubectl
+This is the tool that most Kubernetes engineers primarily use when interacting with a Kubernetes cluster.
+
+Behind the scenes, kubectl interacts directly with the Kubernetes API, converting the commands you type into API requests, which are then executed on the Kubernetes cluster.
+
+With kubectl, you can perform a wide range of operations on the cluster, such as creating, deleting, and updating deployments, exposing your application, checking the logs of your running pods, and monitoring the health and capacity of your nodes and the overall cluster health.
+
+To begin using kubectl, you must first install it on your local machine. Please refer to the next section for installation instructions.
 
 ## Cluster Information
 With the following command, we can get information about the cluster, like the version of Kubernetes that is running, the IP address of the master, and the names of the nodes in the cluster.
@@ -29,6 +40,46 @@ With the following command, we can get information about the cluster, like the v
 ```bash
 kubectl cluster-info
 ```
+
+## How The Communication Works
+
+The communication between kubectl and the Kubernetes cluster is based on RESTful HTTP requests and responses.
+The following diagram illustrates how kubectl interacts with Kubernetes resources:
+
+```
+   Me
+                                                     +--------------------------+
+   x x                                               |    Kubernetes cluster    |
+  x   x                                              |                          |
+   x x                                               |      +---------+         |
+    x                +---------+                     |      |         |         |
+    x   commands     |         | GET, POST, PUT etc. |      |   api   |         |
+    x -------------->| kubectl +---------------------+------+  server |         |
+   x x               |         <---------------------+------+         |         |
+  x x x <--------    +---------+     Response        |      +---------+         |
+ x  x  x   displays                                  |                          |
+x   x   x  commands                                  |                          |
+    x                                                |                          |
+    x                                                |                          |
+    x                                                +--------------------------+
+    x
+```
+
+When you issue a command using kubectl, the tool reads the kubeconfig file on your local machine and obtains all the necessary information to authenticate with the Kubernetes API server. This file includes details about the Kubernetes server's address, your credentials, and context information.
+
+The connection between kubectl and the API server is usually secured by TLS encryption to ensure that no tampering or eavesdropping occurs.
+
+Authentication and authorization occur before the API server processes your request. The API server validates your credentials. There are various ways Kubernetes can authenticate you, which are covered in detail in the following article: Kubernetes - RBAC And Admission Controllers
+
+Once you have been authenticated and authorized, the kubectl command is translated into an API request that conforms to the Kubernetes API specification.
+
+The request is typically a RESTful HTTP request, containing a specific method (GET, POST, PUT, DELETE, etc.). It also targets the relevant API endpoint (e.g., /api/v1/namespaces/default/pods) and includes the necessary data in JSON format (if applicable). The request is then sent over the secure connection to the Kubernetes API server, along with the required headers and your credentials.
+
+Upon receiving the API request, the API server processes it and performs the necessary operations, such as creating or updating resources.
+
+Kubectl receives the API response from the Kubernetes API server, which typically includes data in JSON format, log messages, and more.
+
+Finally, kubectl displays the message to the user in the terminal.
 
 ## Resource Management
 The following commands are used to manage resources in the cluster
