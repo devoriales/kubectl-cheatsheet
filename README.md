@@ -23,7 +23,7 @@ It is a work in progress and we will be adding more commands as we go along. If 
 - [Dry Run](#dry-run)
 - [Looping Through Resources](#looping-through-resources)
 - [Create Resourses with `cat` command](#create-resourses-with-cat)
-- [Flattening Kubecofig](#flattening-kubeconfig-files)
+- [Flattening Kubeconfig](#flattening-kubeconfig-files)
 - [Getting API Resources](#getting-api-resources)
 
 ## What is Kubectl
