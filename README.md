@@ -23,6 +23,7 @@ It is a work in progress and we will be adding more commands as we go along. If 
 - [Dry Run](#dry-run)
 - [Looping Through Resources](#looping-through-resources)
 - [Create Resourses with `cat` command](#create-resourses-with-cat)
+- [Flattening Kubecofig](#flattening-kubeconfig-files)
 - [Getting API Resources](#getting-api-resources)
 
 ## What is Kubectl
@@ -340,6 +341,19 @@ kubectl api-resources --namespaced=true # namespaced resources
 kubectl get pods -v=9  2>&1 | grep curl # get curl call for a specific resource
 kubectl get pods -v=9  2>&1 | grep curl | sed 's/.*curl -k -v -XGET/https/' | sed 's/ -H .*//' # get curl call for a specific resource
 
+```
+
+## Flattening Kubeconfig Files
+
+Assume that you have multiple kubeconfig files and you want to merge them into one file. You can use the following command to do that.
+
+```bash
+KUBECONFIG=~/.kube/config:~/.kube/config2:~/.kube/config3 kubectl config view --flatten > ~/.kube/merged-config
+```
+then you can run the following command to use the merged kubeconfig file:
+
+```bash
+export KUBECONFIG=~/.kube/merged-config
 ```
 
 ## Resources
