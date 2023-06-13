@@ -122,6 +122,7 @@ kubectl get services
 kubectl get deployments
 kubectl get secrets
 kubectl edit <resource-type> <resource-name> # edit a resource in the default editor
+watch -n 2 kubectl get pods  # Continuously monitor pod status every X seconds
 ```
 
 Flags:
