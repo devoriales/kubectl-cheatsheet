@@ -282,6 +282,7 @@ spec:
 
 ```bash
 kubectl config view # display merged kubeconfig settings or a specified kubeconfig file
+kubectl config view --minify --output 'jsonpath={..namespace}' # display the namespace within the context
 kubectl config current-context # display the current-context
 kubectl config use-context <context-name> # set the current-context in a kubeconfig file
 kubectl config set-context <context-name> # set a context entry in kubeconfig
