@@ -317,6 +317,12 @@ kubectl get pods -o name | cut -d/ -f2 | xargs -I {} kubectl delete pod {}
 for pod in $(kubectl get pods -o name | cut -d/ -f2); do kubectl delete pod $pod; done
 ```
 
+Loop through secret data items and print them out
+
+```bash
+ kubectl get secrets -o json | jq -r '.items[] | .metadata.name as $name | .data | to_entries[] | "\($name) \(.key): \((.value|@base64d))"'
+```
+
 ## Create Resourses with `cat` command
 
 With `cat` we can create resources from stdin 
