@@ -317,10 +317,16 @@ kubectl get pods -o name | cut -d/ -f2 | xargs -I {} kubectl delete pod {}
 for pod in $(kubectl get pods -o name | cut -d/ -f2); do kubectl delete pod $pod; done
 ```
 
-Loop through secret data items and print them out
+Loop through all secrets data items and print them out. This will take all secrets. It will also base64 decode the data.
 
 ```bash
  kubectl get secrets -o json | jq -r '.items[] | .metadata.name as $name | .data | to_entries[] | "\($name) \(.key): \((.value|@base64d))"'
+```
+
+Get data for a single secret. It will also base64 decode the data.
+
+```bash
+km get secrets -o json | jq -r '.items[] | .metadata.name as $name | .data | to_entries[] | "\($name) \(.key): \((.value|@base64d))"'
 ```
 
 ## Create Resourses with `cat` command
