@@ -2,8 +2,8 @@
 
 [Blog Post](https://devoriales.com/post/226)
 
-We created this  Kubectl Cheatsheet for you to use as a quick reference guide. It contains the most common commands used when working with Kubernetes.
-It is a work in progress and we will be adding more commands as we go along. If you have any suggestions, please feel free to open an issue or a pull request.
+We've created this Kubectl Cheatsheet as a quick reference guide for you. It contains the most commonly used commands for working with Kubernetes. This cheatsheet is a work in progress, and we'll be adding more commands as we go along. If you have any suggestions, feel free to open an issue or submit a pull request.
+
 ## Table of Contents
 
 - [What is Kubectl](#what-is-kubectl)
@@ -29,6 +29,7 @@ It is a work in progress and we will be adding more commands as we go along. If 
 - [Getting API Resources](#getting-api-resources)
 
 ## What is Kubectl
+
 This is the tool that most Kubernetes engineers primarily use when interacting with a Kubernetes cluster.
 
 Behind the scenes, kubectl interacts directly with the Kubernetes API, converting the commands you type into API requests, which are then executed on the Kubernetes cluster.
@@ -36,7 +37,6 @@ Behind the scenes, kubectl interacts directly with the Kubernetes API, convertin
 With kubectl, you can perform a wide range of operations on the cluster, such as creating, deleting, and updating deployments, exposing your application, checking the logs of your running pods, and monitoring the health and capacity of your nodes and the overall cluster health.
 
 To begin using kubectl, you must first install it on your local machine. Please refer to the next section for installation instructions.
-
 
 ## How The Communication Works
 
@@ -79,11 +79,13 @@ Kubectl receives the API response from the Kubernetes API server, which typicall
 Finally, kubectl displays the message to the user in the terminal.
 
 ## How To Install Kubectl
+
 Download the latest version:
 
 ```
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/darwin/amd64/kubectl"
 ```
+
 Download a specific version:
 
 ```
@@ -104,8 +106,8 @@ kubectl version --client
 Client Version: version.Info{Major:"1", Minor:"19", GitVersion:"v1.19.7", GitCommit:"1dd5338295409edcfff11505e7bb246f0d325d15", GitTreeState:"clean", BuildDate:"2021-01-13T13:23:52Z", GoVersion:"go1.15.5", Compiler:"gc", Platform:"darwin/amd64"}
 ```
 
-
 ## Cluster Information
+
 With the following command, we can get information about the cluster, like the version of Kubernetes that is running, the IP address of the master, and the names of the nodes in the cluster.
 
 ```bash
@@ -113,6 +115,7 @@ kubectl cluster-info
 ```
 
 ## Resource Management
+
 The following commands are used to manage resources in the cluster
 
 ```bash
@@ -126,6 +129,7 @@ watch -n 2 kubectl get pods  # Continuously monitor pod status every X seconds
 ```
 
 Flags:
+
 ```bash
 --all-namespaces # list the requested object(s) across all namespaces
 --watch # after listing/getting the requested object, watch for changes
@@ -138,10 +142,18 @@ Flags:
 --output-watch-events # output watch event objects when --watch or --watch-only is used example kube get pods --watch --output-watch-events
 ```
 
+### Sort resources by --sort-by flag
+
+```bash
+kubectl get pods --sort-by=.metadata.creationTimestamp
+kubectl get pods --sort-by=.status.phase
+kubectl get pods --sort-by=.spec.nodeName
+```
+
 ## Inspecting Resources
+
 The following commands are used to inspect resources in the cluster.
 Also we have included the `kubectl explain` command which is used to get the documentation of a resource type.
-
 
 ```bash
 kubectl describe nodes <node-name>
@@ -152,6 +164,7 @@ kubectl explain <resource-type> # get the documentation of a resource type examp
 ```
 
 ## Creating and Updating Resources
+
 With the following commands, we can create and update resources in the cluster.
 
 ```bash
@@ -160,10 +173,12 @@ kubectl apply -f <file-name>
 ```
 
 ## Deleting Resources
-With the following commands, we can delete resources in the cluster. 
+
+With the following commands, we can delete resources in the cluster.
 
 ```bash
-kubectl delete pods <pod-name>
+kubectl delete pods <pod-name> # delete a pod
+kubectl delete pods --all # delete all pods in the namespace
 kubectl delete services <service-name>
 kubectl delete -f <file-name>
 kubectl delete deployment <deployment-name> # delete a deployment
@@ -171,6 +186,7 @@ kubectl delete namespace <namespace-name> # delete a namespace
 ```
 
 ## Scaling Deployments
+
 With the following command, we can scale your deployments:
 
 ```bash
@@ -179,7 +195,7 @@ kubectl scale deployment <deployment-name> --replicas=<number-of-replicas>
 
 ## Exposing Deployments
 
-In this section, we'll learn how to expose Kubernetes deployments using kubectl with different service types: ClusterIP, NodePort, and LoadBalancer. 
+In this section, we'll learn how to expose Kubernetes deployments using kubectl with different service types: ClusterIP, NodePort, and LoadBalancer.
 Exposing a deployment allows us to make the application accessible to users or other services, either within the cluster or externally.
 
 ```bash
@@ -191,7 +207,8 @@ kubectl expose deployment <deployment-name> --type=LoadBalancer --port=<port> # 
 The loadbalancer service type is only supported in cloud providers that support load balancers.
 
 ## Managing Rollouts
-With the following commands, we can manage the rollouts of our deployments. 
+
+With the following commands, we can manage the rollouts of our deployments.
 Rollouts are an essential part of the deployment process, as they allow you to update your applications while minimizing downtime and ensuring  transitions between versions.
 
 ```bash
@@ -202,6 +219,7 @@ kubectl rollout undo deployment <deployment-name> --to-revision=<revision-number
 ```
 
 ## Working with Logs
+
 With the following commands, we can work with the logs of our pods:
 
 ```bash
@@ -211,6 +229,7 @@ kubectl logs -p <pod-name> # print the logs for the previous instance of the con
 ```
 
 ## Executing Commands in Containers
+
 Sometimes we need to execute commands in a container:
 
 ```bash
@@ -223,11 +242,10 @@ kubectl cp <pod-name>:<path-to-file> <path-to-local-file> -c <container-name>
 kubectl cp <path-to-local-file> <pod-name>:<path-to-file> -c <container-name>
 ```
 
-
 ## Port Forwarding
+
 With the following command, we can forward a local port to a port on a pod or service.
 This is very handy if the application is not exposed to the outside world, but you still want to access it.
-
 
 ```bash
 kubectl port-forward <pod-name> <local-port>:<container-port>
@@ -235,6 +253,7 @@ kubectl port-forward <service-name> <local-port>:<container-port>
 ```
 
 ## Labeling and Annotating Resources
+
 With the following commands, we can add labels and annotations to resources in the cluster.
 This is useful for organizing and grouping resources, as well as for attaching metadata to resources.
 
@@ -244,7 +263,8 @@ kubectl annotate pods <pod-name> <annotation-key>=<annotation-value>
 ```
 
 ## Taints and Tolerations
-Taints and tolerations are a way to control how pods are scheduled on nodes. 
+
+Taints and tolerations are a way to control how pods are scheduled on nodes.
 For example, we can use taints to prevent pods from being scheduled on nodes that have sensitive data.
 
 ```bash
@@ -277,8 +297,6 @@ spec:
         effect: "NoSchedule"
 ```
 
-
-
 ## Configuring Kubectl
 
 ```bash
@@ -293,6 +311,7 @@ kubectl config unset users.<name> # unset a user entry in kubeconfig
 ```
 
 ### set a cluster entry in kubeconfig
+
 ```bash
 kubectl config set-cluster <cluster-name> \
   --certificate-authority=<path-to-ca-file> \
@@ -302,36 +321,82 @@ kubectl config set-cluster <cluster-name> \
 ```
 
 ## Dry Run
-Dry run allows you to preview the changes that will be made to the cluster without actually making them. This is useful for debugging and testing.
 
+Dry run allows you to preview the changes that will be made to the cluster without actually making them. This is useful for debugging and testing.
 
 ```bash
 kubectl apply --dry-run=client -f <file-name>
 ```
 
 ## Looping Through Resources
-Sometimes you need to loop through resources. For example, you want to delete all pods in a namespace. we can use the following commands to do that.
+
+Sometimes you need to loop through resources.
+For example, you might want to delete all pods in a namespace or get data for all secrets.
+
+### Get all pod names in a namespace
+
+```bash
+kubectl get pods -o name | cut -d/ -f2
+```
+
+- -o name - get the name of the resource
+- cut utility - cut out selected portions of each line of a file
+- -d/ - use / as the delimiter
+- -f2 - get the second field
+
+```bash
+
+Another way is using the jq utility. 
+jq is a lightweight and flexible command-line JSON processor.
+
+
+```bash
+kubectl get pods -o json | jq -r '.items[].metadata.name'
+```
+
+- -o json - get the output in json format since jq works with json
+- items[] - get all items in the array
+- metadata.name - get the name of the metadata object
+
+### Delete all pods in a namespace
+
+```bash
+kubectl get pods -o name | xargs -I {} kubectl delete {}
+```
+
+- xargs - build and execute command lines from standard input
+- -I {} - replace {} with the input
+
+Now we can combine the two commands to delete all pods in a namespace (this is more to show how to combine commands, as there is a better way to delete all pods in a namespace)
 
 ```bash
 kubectl get pods -o name | cut -d/ -f2 | xargs -I {} kubectl delete pod {}
 for pod in $(kubectl get pods -o name | cut -d/ -f2); do kubectl delete pod $pod; done
 ```
 
-Loop through all secrets data items and print them out. This will take all secrets. It will also base64 decode the data.
+Easy way to delete all pods in a namespace
 
 ```bash
- kubectl get secrets -o json | jq -r '.items[] | .metadata.name as $name | .data | to_entries[] | "\($name) \(.key): \((.value|@base64d))"'
+kubectl delete pods --all
 ```
 
-Get data for a single secret. It will also base64 decode the data.
+### Get data for specific secret
+
+On MacOS we use base64 -D to decode the data
 
 ```bash
-km get secrets -o json | jq -r '.items[] | .metadata.name as $name | .data | to_entries[] | "\($name) \(.key): \((.value|@base64d))"'
+kubectl get secret <secret-name> -o json | jq -r '.data' | base64 -D
 ```
+
+or if Linux, we use base64 -d
+  
+  ```bash
+  kube get secret <secret-name> -o json | jq -r '.data' | base64 -d
+  ```
 
 ## Create Resourses with `cat` command
 
-With `cat` we can create resources from stdin 
+With `cat` we can create resources from stdin
 
 ```bash
 cat <<EOF | kubectl create -f -
@@ -349,7 +414,6 @@ EOF
 
 ## Getting API Resources
 
-
 ```bash
 kubectl api-resources
 kubectl api-resources --namespaced=true # namespaced resources
@@ -366,13 +430,26 @@ Assume that you have multiple kubeconfig files and you want to merge them into o
 ```bash
 KUBECONFIG=~/.kube/config:~/.kube/config2:~/.kube/config3 kubectl config view --flatten > ~/.kube/merged-config
 ```
+
 then you can run the following command to use the merged kubeconfig file:
 
 ```bash
 export KUBECONFIG=~/.kube/merged-config
 ```
 
+## Use Custom Columns --custom-columns
+
+```bash
+kubectl get pods -o custom-columns=NAME:.metadata.name 
+kubectl get pods -o custom-columns=NAME:.metadata.name,STATUS:.status.phase # get multiple columns and status of the pod
+```
+
+You can have multiple columns separated by comma.
+
+- custom-columns - output in custom columns format
+- NAME: create a column with the header NAME
+
 ## Resources
 
-* [Kubernetes Cheat Sheet](https://kubernetes.io/docs/reference/kubectl/cheatsheet/)
-* [Kubernetes Documentation](https://kubernetes.io/docs/home/)
+- [Kubernetes Cheat Sheet](https://kubernetes.io/docs/reference/kubectl/cheatsheet/)
+- [Kubernetes Documentation](https://kubernetes.io/docs/home/)
