@@ -27,6 +27,8 @@ We've created this Kubectl Cheatsheet as a quick reference guide for you. It con
 - [Create Resourses with `cat` command](#create-resourses-with-cat)
 - [Flattening Kubeconfig](#flattening-kubeconfig-files)
 - [Getting API Resources](#getting-api-resources)
+- [Use Custom Columns --custom-columns](#use-custom-columns---custom-columns)
+- [Use kubectl auth can-i](#use-kubectl-auth-can-i)
 
 ## What is Kubectl
 
@@ -439,6 +441,10 @@ export KUBECONFIG=~/.kube/merged-config
 
 ## Use Custom Columns --custom-columns
 
+`--custom-columns` is not very known to many people, at least from my experience.
+
+When managing Kubernetes pods, having the ability to customize your command line output can be incredibly powerful. kubectl provides the `--custom-columns` option to do just that, enabling you to specify and format your own columns for a more tailored display of resources.
+
 ```bash
 kubectl get pods -o custom-columns=NAME:.metadata.name 
 kubectl get pods -o custom-columns=NAME:.metadata.name,STATUS:.status.phase # get multiple columns and status of the pod
@@ -448,6 +454,59 @@ You can have multiple columns separated by comma.
 
 - custom-columns - output in custom columns format
 - NAME: create a column with the header NAME
+
+With the above command, you're not only fetching the pod names but also their current phase, neatly organized into the NAME and STATUS columns.
+
+Remember, the --custom-columns option takes a comma-separated list, allowing you to define multiple columns. Each column in the list is defined by a HEADER:JSON_PATH_EXPRESSION pair:
+
+In the following example, we will set some odd (custom) header:
+  
+  ```bash
+   kubectl get pods -o custom-columns=MY_SUPER_PODS:.metadata.name,STATUS:.status.phase
+  ```
+
+ Output example:
+  
+  ```bash
+MY_SUPER_PODS                                              STATUS
+keda-operator-metrics-apiserver-5bb87b6cc5-hqmrb   Running
+devoriales-rabbitmq-0                              Running
+keda-admission-webhooks-6b4b4b64fc-4wc8b           Running
+keda-operator-7fdd98c445-9ljhj                     Running
+consumer-deployment-58f8855bb7-hr7px               Running
+```
+
+## Use kubectl auth can-i
+
+This command is used to check if subjects can perform an action on a resource.
+The way how you specify this is by using the following syntax:
+
+```bash
+kubectl auth can-i <VERB> <RESOURCE> --namespace <NAMESPACE> --as <USER>
+```
+
+You can also set --all-namespaces flag to check if the user can perform an action on a resource in all namespaces.
+
+Here is an practical example how we can check if the user can create pods in the default namespace:
+
+```bash
+kubectl auth can-i create pods --namespace default
+```
+
+### Check if a service account can perform an action on a resource
+
+The command `kubectl auth can-i` can be very handy when you want to check what a specific service account can do.
+For example, you can check if the default service account in the default namespace can create pods:
+
+```bash
+kubectl auth can-i create pods --namespace default --as=system:serviceaccount:default:default
+```
+
+--as flag is used to specify the service account.
+system: is a prefix for service accounts.
+serviceaccount:default:default is the name of the service account in the default namespace.
+
+Please Note! `auth can-i` assumes that your current user has the permissions to impersonate a service account. If not, you may need to adjust your RBAC policies accordingly.
 
 ## Resources
 
