@@ -346,7 +346,17 @@ kubectl get pods -o name | cut -d/ -f2
 - -d/ - use / as the delimiter
 - -f2 - get the second field
 
+Example Output: 
+
 ```bash
+hostpath-provisioner-58694c9f4b-snv67
+coredns-7745f9f87f-5nzv7
+calico-kube-controllers-649854c487-pk4dv
+calico-node-mjc66
+metrics-server-56ffd4f94b-ngzc2
+calico-node-t7tgg
+calico-node-4wndg
+```
 
 Another way is using the jq utility. 
 jq is a lightweight and flexible command-line JSON processor.
