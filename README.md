@@ -29,6 +29,9 @@ We've created this Kubectl Cheatsheet as a quick reference guide for you. It con
 - [Getting API Resources](#getting-api-resources)
 - [Use Custom Columns --custom-columns](#use-custom-columns---custom-columns)
 - [Use kubectl auth can-i](#use-kubectl-auth-can-i)
+- [Troubleshooting](#troubleshooting)
+  - [Delete stuck namespaces in Terminating state](#delete-stuck-namespaces-in-terminating-state)
+- [Resources](#resources)
 
 ## What is Kubectl
 
@@ -523,6 +526,7 @@ Please Note! `auth can-i` assumes that your current user has the permissions to 
 ## Troubleshooting
 
 ### Delete stuck namespaces in Terminating state
+Full tutorial can be found on https://devoriales.com/post/332/resolve-stuck-namespaces-in-kubernetes-a-step-by-step-tutorial
 
 First, you need to get the list of namespaces in the Terminating state:
 
