@@ -526,6 +526,7 @@ Please Note! `auth can-i` assumes that your current user has the permissions to 
 ## Troubleshooting
 
 ### Delete stuck namespaces in Terminating state
+
 Full tutorial can be found on https://devoriales.com/post/332/resolve-stuck-namespaces-in-kubernetes-a-step-by-step-tutorial
 
 First, you need to get the list of namespaces in the Terminating state:
