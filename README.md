@@ -307,9 +307,10 @@ kubectl config view --minify --output 'jsonpath={..namespace}' # display the nam
 kubectl config current-context # display the current-context
 kubectl config use-context <context-name> # set the current-context in a kubeconfig file
 kubectl config set-context <context-name> # set a context entry in kubeconfig
-kubectl config set-cluster <cluster-name> # set a cluster entry in kubeconfig
+kubectl config set-cluster <cluster-name> # set a cluster entry in kubeconfig 
 kubectl config set-credentials <user-name> # set a user entry in kubeconfig
 kubectl config unset users.<name> # unset a user entry in kubeconfig
+kubectl config set-context --current --namespace=<namespace> # set the default namespace for the current context
 ```
 
 ### set a cluster entry in kubeconfig
@@ -517,6 +518,65 @@ system: is a prefix for service accounts.
 serviceaccount:default:default is the name of the service account in the default namespace.
 
 Please Note! `auth can-i` assumes that your current user has the permissions to impersonate a service account. If not, you may need to adjust your RBAC policies accordingly.
+
+
+## Troubleshooting
+
+### Delete stuck namespaces in Terminating state
+
+First, you need to get the list of namespaces in the Terminating state:
+
+```bash
+kubectl get namespaces --field-selector status.phase=Terminating
+```
+
+Then you should check why the namespace is stuck in the Terminating state:
+
+```bash
+kubectl describe namespace <namespace-name>
+```
+
+Many times, the namespace is stuck in the Terminating state because of the finalizers. You can remove the finalizers from the namespace to force delete it:
+
+Export the namespace to a file:
+
+```bash
+kubectl get namespace <namespace-name> -o json > namespace.json
+```
+
+Edit the namespace.json file and remove the finalizers section:
+
+example finalizers section, remove "kubernetes" from the list:
+
+```json
+"finalizers": [
+    "kubernetes"
+]
+```
+
+Start the kube proxy:
+
+```bash
+kubectl proxy &
+```
+
+Then run the following command to delete the namespace:
+
+```bash
+curl -X PUT http://127.0.0.1:8001/api/v1/namespaces/<namespace-name>/finalize -H "Content-Type: application/json" --data-binary "@namespace.json"
+```
+
+Stop the kube proxy:
+
+```bash
+killall kubectl
+```
+
+Verify that the namespace is deleted:
+
+```bash
+kubectl get namespaces
+```
 
 ## Resources
 
