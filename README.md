@@ -233,6 +233,15 @@ kubectl logs -f <pod-name> # follow the logs
 kubectl logs -p <pod-name> # print the logs for the previous instance of the container in a pod if it exists
 ```
 
+### Streamlining Log Access:
+For a more streamlined approach, you can retrieve logs based on deployments or labels:
+
+```bash
+kubectl logs -f deployment/<deployment-name> # follow logs from a pod associated with a deployment
+kubectl logs -f -l app=<app-name> # follow logs from all pods with a specific label
+```
+Using these methods, you can easily monitor logs from all pods associated with a deployment or from all pods with a specific label, saving you time and effort.
+
 ## Executing Commands in Containers
 
 Sometimes we need to execute commands in a container:
