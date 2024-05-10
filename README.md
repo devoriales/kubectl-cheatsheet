@@ -14,6 +14,7 @@ We've created this Kubectl Cheatsheet as a quick reference guide for you. It con
 - [Inspecting Resources](#inspecting-resources)
 - [Creating and Updating Resources](#creating-and-updating-resources)
 - [Deleting Resources](#deleting-resources)
+- [Run Command](#run-command)
 - [Scaling Deployments](#scaling-deployments)
 - [Exposing Deployments](#exposing-deployments)
 - [Managing Rollouts](#managing-rollouts)
@@ -153,6 +154,8 @@ Flags:
 kubectl get pods --sort-by=.metadata.creationTimestamp
 kubectl get pods --sort-by=.status.phase
 kubectl get pods --sort-by=.spec.nodeName
+kubectl get pv --sort-by=.spec.capacity.storage
+
 ```
 
 ## Inspecting Resources
@@ -173,8 +176,8 @@ kubectl explain <resource-type> # get the documentation of a resource type examp
 With the following commands, we can create and update resources in the cluster.
 
 ```bash
-kubectl create -f <file-name>
-kubectl apply -f <file-name>
+kubectl create -f <file-name> # This command is used to create resources in the cluster
+kubectl apply -f <file-name> # This command is used to create or update resources in the cluster
 ```
 
 ## Deleting Resources
@@ -189,6 +192,28 @@ kubectl delete -f <file-name>
 kubectl delete deployment <deployment-name> # delete a deployment
 kubectl delete namespace <namespace-name> # delete a namespace
 ```
+
+## Run command
+
+With the ```run``` command, we can run a container in a pod. It is a quick way to create a pod with a container in it.
+
+```bash
+kubectl run <pod-name> --image=<image-name> # run a container in a pod
+kubectl run <pod-name> --image=<image-name> --restart=Never # run a container in a pod with a specific restart policy
+kubectl run <pod-name> --image=<image-name> --restart=Never --dry-run=client -o yaml # generate a pod manifest without creating it
+kubectl run <pod-name> --image=<image-name> --restart=Never --dry-run=client -o yaml > pod.yaml # save the pod manifest to a file
+kubectl run <pod-name> --image=<image-name> --restart=Never --dry-run=client -o yaml | kubectl apply -f - # create a pod from a generated manifest
+
+```
+
+Example of using overrides:
+
+```bash
+kubectl run <pod-name> --image=<image-name> --overrides='{"apiVersion":"v1","spec":{"containers":[{"name":"<container-name>","image":"<image-name>"}]}}'
+kubectl run nginx --image=nginx --overrides='{ "apiVersion": "v1", "spec": { "containers": [ { "name": "nginx", "image": "nginx:1.7.9", "ports": [ { "containerPort": 80 } ] } ] } }'
+```
+
+official documentation: https://kubernetes.io/docs/reference/kubectl/generated/kubectl_run/
 
 ## Scaling Deployments
 
