@@ -248,6 +248,26 @@ kubectl rollout undo deployment <deployment-name> # Rollback to the previous rev
 kubectl rollout undo deployment <deployment-name> --to-revision=<revision-number> # Rollback to a specific revision
 ```
 
+## Working with Images
+
+Set the image on a deployment:
+
+```bash
+kubectl set image deployment/<deployment-name> <container-name>=<new-image>
+```
+
+or when having only one container in the pod:
+
+```bash
+kubectl set image deployment/<deployment-name> <new-image>
+```
+
+Using json patch:
+
+```bash
+kubectl patch deployment <deployment-name> -p '{"spec":{"template":{"spec":{"containers":[{"name":"<container-name>","image":"<new-image>"}]}}}}'
+```
+
 ## Working with Logs
 
 With the following commands, we can work with the logs of our pods:
