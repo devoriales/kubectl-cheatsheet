@@ -179,6 +179,14 @@ With the following commands, we can create and update resources in the cluster.
 kubectl create -f <file-name> # This command is used to create resources in the cluster
 kubectl apply -f <file-name> # This command is used to create or update resources in the cluster
 ```
+We can also create resources directly from the command line:
+
+```bash
+kubectl create deployment <deployment-name> --image=<image-name> # create a deployment
+kubectl create service <service-name> --tcp=<port>:<target-port> # create a service
+kubectl create role <role-name> --verb=<verb> --resource=<resource> --resource-name=<resource-name> # create a role
+kubectl create rolebinding <role-binding-name> --role=<role-name> --user=<user> # create a rolebinding
+```
 
 ## Deleting Resources
 
