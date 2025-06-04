@@ -231,6 +231,11 @@ With the following command, we can scale your deployments:
 ```bash
 kubectl scale deployment <deployment-name> --replicas=<number-of-replicas>
 ```
+Will it work with statefulsets? Yes, it will work with statefulsets as well.
+
+```bash
+kubectl scale statefulset <statefulset-name> --replicas=<number-of-replicas>
+```
 
 ## Exposing Deployments
 
@@ -256,6 +261,8 @@ kubectl rollout history deployment <deployment-name> # Check the history of a ro
 kubectl rollout undo deployment <deployment-name> # Rollback to the previous revision
 kubectl rollout undo deployment <deployment-name> --to-revision=<revision-number> # Rollback to a specific revision
 ```
+
+> **Note:** The revision number can be found in the output of `kubectl rollout history deployment <deployment-name>`.
 
 ## Horizontal Pod Autoscaling Commands
 Horizontal Pod Autoscaling (HPA) is a powerful feature in Kubernetes that automatically scales the number of pods in a deployment based on observed CPU utilization or other select metrics.
