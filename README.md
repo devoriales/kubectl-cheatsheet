@@ -15,9 +15,10 @@ We've created this Kubectl Cheatsheet as a quick reference guide for you. It con
 - [Creating and Updating Resources](#creating-and-updating-resources)
 - [Deleting Resources](#deleting-resources)
 - [Run Command](#run-command)
-- [Scaling Deployments](#scaling-deployments)
+- [Scaling Deployments](#scaling-deployments)scaling-deployments
 - [Exposing Deployments](#exposing-deployments)
 - [Managing Rollouts](#managing-rollouts)
+- [Horizontal Pod Autoscaling Commands](#horizontal-pod-autoscaling-commands)
 - [Working with Logs](#working-with-logs)
 - [Executing Commands in Containers](#executing-commands-in-containers)
 - [Port Forwarding](#port-forwarding)
@@ -254,6 +255,15 @@ kubectl rollout status deployment <deployment-name> # Check the status of a roll
 kubectl rollout history deployment <deployment-name> # Check the history of a rollout
 kubectl rollout undo deployment <deployment-name> # Rollback to the previous revision
 kubectl rollout undo deployment <deployment-name> --to-revision=<revision-number> # Rollback to a specific revision
+```
+
+## Horizontal Pod Autoscaling Commands
+Horizontal Pod Autoscaling (HPA) is a powerful feature in Kubernetes that automatically scales the number of pods in a deployment based on observed CPU utilization or other select metrics.
+```bash
+kubectl autoscale deployment <deployment-name> --cpu-percent=<target-cpu-utilization> --min=<min-replicas> --max=<max-replicas> # Create an HPA for a deployment
+kubectl get hpa # List all Horizontal Pod Autoscalers in the cluster
+kubectl describe hpa <hpa-name> # Describe a specific Horizontal Pod Autoscaler
+kubectl delete hpa <hpa-name> # Delete a Horizontal Pod Autoscaler
 ```
 
 ## Working with Images
