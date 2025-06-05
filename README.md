@@ -362,6 +362,8 @@ A table of the secrets:
 | kubernetes.io/ssh-auth | Credentials for SSH authentication |
 | kubernetes.io/tls | Data for a TLS client or server |
 
+If you just type `kubectl create secret`, it will give some hints on how to create secrets.
+
 ### Create pull secret for private registry
 To create a pull secret for a private registry, you can use the following command:
 
@@ -371,6 +373,16 @@ kubectl create secret docker-registry <secret-name> \
   --docker-username=<username> \
   --docker-password=<password> \
   --docker-email=<email>
+```
+
+Don't forget to add the secret to the deployment or pod spec so that the Kubernetes can use it to pull images from the private registry:
+
+```yamlspec:
+  containers:
+  - name: <container-name>
+    image: <image-name>
+  imagePullSecrets:
+  - name: <secret-name>
 ```
 
 ### Create a generic secret
