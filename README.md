@@ -406,6 +406,27 @@ kubectl get secret my-secret -o jsonpath='{.data.username}' | base64 --decode # 
 kubectl get secret my-secret -o jsonpath='{.data.password}' | base64 --decode # get the password
 ```
 
+In the following, we have a more complex example where we have a json file with multiple keys and values.
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-complex-secret
+type: Opaque
+data:
+  config.json: eyJrZXkiOiAidmFsdWUiLCAibmFtZSI6ICJ0ZXN0In0= # base64 encoded value of {"key": "value", "name": "test"}
+```
+
+To get the data from the secret, we can use the following command:
+
+```bash
+kubectl get secret my-complex-secret -o jsonpath='{.data.config\.json}' | base64 --decode | jq . # get the config.json file and decode it
+```
+> **Note:** The `jq` utility is used to parse the JSON output. If you don't have it installed, you can install it using your package manager (e.g., `brew install jq` on macOS or `apt-get install jq` on Ubuntu).
+
+The reason why we need to escape the dot in the jsonpath expression is that the dot is a special character in jsonpath, and we need to escape it to access the key in the JSON object.
+
 ## Labeling and Annotating Resources
 
 With the following commands, we can add labels and annotations to resources in the cluster.
