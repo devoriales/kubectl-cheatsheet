@@ -293,6 +293,13 @@ Using json patch:
 kubectl patch deployment <deployment-name> -p '{"spec":{"template":{"spec":{"containers":[{"name":"<container-name>","image":"<new-image>"}]}}}}'
 ```
 
+### Get the image(s) used by a pod
+To retrieve the image(s) used by a pod, you can use the following command:
+
+```bash
+kubectl get pod <pod-name> -o jsonpath='{.spec.containers[*].image}'
+```
+
 ## Working with Logs
 
 With the following commands, we can work with the logs of our pods:
@@ -334,6 +341,65 @@ This is very handy if the application is not exposed to the outside world, but y
 ```bash
 kubectl port-forward <pod-name> <local-port>:<container-port>
 kubectl port-forward <service-name> <local-port>:<container-port>
+```
+
+## Create Secrets
+In Kubernetes, we have the following types of secrets:
+OpaqueArbitrary user-defined data (default type)kubernetes.io/service-account-tokenServiceAccount tokenkubernetes.io/dockercfgSerialized ~/.dockercfg filekubernetes.io/dockerconfigjsonSerialized ~/.docker/config.json filekubernetes.io/basic-authCredentials for basic authenticationkubernetes.io/ssh-authCredentials for SSH authenticationkubernetes.io/tlsData for a TLS client or serverbootstrap.kubernetes.io/tokenBootstrap token data
+
+A table of the secrets:
+| Secret Type | Description |
+|-------------|-------------|
+| Opaque | Arbitrary user-defined data (default type) |
+| kubernetes.io/service-account-token | ServiceAccount token |
+| kubernetes.io/dockercfg | Serialized ~/.dockercfg file |
+| kubernetes.io/dockerconfigjson | Serialized ~/.docker/config.json file |
+| kubernetes.io/basic-auth | Credentials for basic authentication |
+| kubernetes.io/ssh-auth | Credentials for SSH authentication |
+| kubernetes.io/tls | Data for a TLS client or server |
+
+### Create pull secret for private registry
+To create a pull secret for a private registry, you can use the following command:
+
+```bash
+kubectl create secret docker-registry <secret-name> \
+  --docker-server=<registry-server> \
+  --docker-username=<username> \
+  --docker-password=<password> \
+  --docker-email=<email>
+```
+
+### Create a generic secret
+To create a generic secret, you can use the following command:
+```bash
+kubectl create secret generic <secret-name> \
+  --from-literal=<key>=<value> # create a secret from a literal value
+kubectl create secret generic <secret-name> \
+  --from-file=<path-to-file> # create a secret from a file
+kubectl create secret generic <secret-name> \
+  --from-env-file=<path-to-env-file> # create a secret from an env file
+``` 
+
+### Get data from a secret
+
+Assume we have the following secret:
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-secret
+type: Opaque
+data:
+  username: dXNlcm5hbWU= # base64 encoded value of "username" 
+  password: cGFzc3dvcmQ= # base64 encoded value of "password"
+```
+
+To get the data from the secret, we can use the following command:
+
+```bash
+kubectl get secret my-secret -o jsonpath='{.data.username}' | base64 --decode # get the username
+kubectl get secret my-secret -o jsonpath='{.data.password}' | base64 --decode # get the password
 ```
 
 ## Labeling and Annotating Resources
