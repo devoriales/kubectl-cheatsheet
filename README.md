@@ -578,6 +578,18 @@ Easy way to delete all pods in a namespace
 kubectl delete pods --all
 ```
 
+### Delete all pods running on a specific node
+```bash
+kubectl get pods --field-selector spec.nodeName=<node-name> -o name | xargs -I {} kubectl delete {}
+```
+
+### Delete pods with a specific name pattern on a specific node
+
+```bash
+kubectl get pods --all-namespaces--field-selector spec.nodeName=<node-name> -o name | grep <name-pattern> | xargs -I {} kubectl delete {}
+```
+
+
 ### Get data for specific secret
 
 On MacOS we use base64 -D to decode the data
