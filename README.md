@@ -163,6 +163,18 @@ kubectl get pv --sort-by=.spec.capacity.storage
 
 ```
 
+### Field Selector flag
+This flag is used to filter resources based on specific fields.
+
+```bash
+kubectl get pods --field-selector=status.phase=Running # get all running pods
+kubectl get pods --field-selector=spec.nodeName=<node-name> # get all pods running on a specific node
+kubectl get pods --field-selector=metadata.name=<pod-name> # get a specific pod by name
+kubectl get pods --field-selector=status.phase!=Running #
+# delete all pods that are not in the Running state
+kubectl delete pods --field-selector=status.phase!=Running
+```
+
 ## Inspecting Resources
 
 The following commands are used to inspect resources in the cluster.
